@@ -1,4 +1,5 @@
 ------TURTLE QUARRY------
+--pastbin link: https://computercraft.cc/
 --[[
    1) Place chest at bottom-left corner of desired quarry location
    2) Place turtle adjacent to, and facing away from, chest
