@@ -1,23 +1,7 @@
 {
-    "Blocks" : {
-        "Stone" : [
-            "Cobblestone",
-            "Stone"
-        ],
-        "Wood" : [
-            "Oak Planks",
-            "Birch Planks"
-        ]
-    },
-    "Organic" : {
-        "Saplings" : [
-            "Oak Saplings",
-            "Birth Saplings"
-        ],
-        "Seeds" : [
-            "Seeds",
-            "Carrot",
-            "Potato"
-        ]
-    }
-}
+    "Stone" : [
+        "minecraft:cobblestone",
+        "minecraft:stone",
+        "minecraft:gravel",
+        "projectred-exploration:stone",
+        "minecraft:mossy_cobblestone",
