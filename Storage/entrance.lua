@@ -121,5 +121,4 @@ storageConf = JSON:decode(io.open(storagePath, "rb"):read "*a")
     4. [x] lookup item path in storageConf
     5. [ ] use path of item to sort item appropriately (node > side)
     6. [ ] iterate over each slot in inventory until empty reached, return Step 2
-    7. [ ] set up listeners on node computers
 ]]--
