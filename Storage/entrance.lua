@@ -10,8 +10,14 @@ local JSONPath = "../json.lua"
 -- path to the storage configuration file
 local storagePath = "storage.json"
 
+-- path to the layout configuration file
+local layoutPath = "layout.json"
+
+-- side on computer on which modem is placed
+local modemSide = "back"
+
 -- name of protocol used by machines (default: "storage")
-local protocol = "storage"
+--local protocol = "storage"
 
 ---END CONFIGURATION---
 
@@ -24,8 +30,10 @@ end
 
 -- initialize "entrance" on rednet
 function initRednet(modemSide)
+
+    -- turn on the computer's attached modem
     rednet.open(modemSide)
-    rednet.host("storage", "entrance")
+    
 end 
 
 -- get a sorted list of the keys of a table
@@ -105,6 +113,37 @@ function getPath(tab, ele, path)
     end
 end
 
+-- move everything from the entrance chest to its appropriate chest
+function clearEntrance(storageConf, layoutConf)
+    
+    -- wrap the entrance chest
+    entranceChest = peripheral.wrap(layoutConf["Entrance"])
+
+    -- grab the contents of the entrance chest
+    entranceContents = entranceChest.list()
+
+    -- run through the entrance chest contents
+    for slot, item in pairs(entranceContents) do
+         
+        -- get the destination of the item
+        itemDest = getPath(storageConf, item["name"])
+
+        -- if the item has no assigned destination, throw it in Other
+        if itemDest == nil then
+            itemDest = "Other"
+        end
+
+        -- convert the array to a String
+        if type(itemDest) ~= "string" then
+            itemDest = itemDest[1]
+        end
+
+        -- push the item where it needs to go
+        entranceChest.pushItems(layoutConf[itemDest], slot)
+
+    end
+end
+
 ---END FUNCTIONS---
 
 -- load the JSON parser
@@ -113,12 +152,21 @@ JSON = (loadfile(JSONPath))()
 -- load the storage configuration
 storageConf = JSON:decode(io.open(storagePath, "rb"):read "*a")
 
---[[
-    TODO
-    1. [ ] find and hookup chest
-    2. [ ] listen for item deposit
-    3. [ ] get name of deposited item
-    4. [x] lookup item path in storageConf
-    5. [ ] use path of item to sort item appropriately (node > side)
-    6. [ ] iterate over each slot in inventory until empty reached, return Step 2
-]]--
+-- load the chest layout
+layoutConf = JSON:decode(io.open(layoutPath, "rb"):read "*a")
+
+-- initialize rednet connections
+initRednet(modemSide)
+
+-- main program loop
+while true do
+
+    -- clear the entrance chest if something is in it
+    if peripheral.wrap(layoutConf["Entrance"]).list() ~= nil then
+        clearEntrance(storageConf, layoutConf)
+    end
+
+    -- wait 5 seconds before checking entrance chest again
+    sleep(5)
+end
+
