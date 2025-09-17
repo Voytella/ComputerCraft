@@ -133,7 +133,7 @@ function clearEntrance(storageConf, layoutConf)
             itemDest = "Other"
         end
 
-        -- convert the array to a String
+        -- convert the single-length array to a String
         if type(itemDest) ~= "string" then
             itemDest = itemDest[1]
         end
